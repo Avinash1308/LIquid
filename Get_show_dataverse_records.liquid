@@ -1,0 +1,40 @@
+{% fetchxml xmlvar %}
+<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
+<entity name="account">
+<attribute name="name"/>
+<attribute name="primarycontactid"/>
+<attribute name="accountid"/>
+<attribute name="createdon"/>
+<attribute name="createdby"/>
+<order attribute="name" descending="false"/>
+<filter type="and">
+<condition attribute="statecode" operator="eq" value="0"/>
+</filter>
+</entity>
+</fetch>
+{% endfetchxml %}
+<table class="table">
+<thead class="thead_dark">
+    <tr>
+        <th Scope="col">Name</th>
+        <th Scope="col">Contact</th>
+        <th Scope="col">Id</th>
+        <th Scope="col">Created On</th>
+        <th Scope="col">Created By</th>
+    </tr>
+
+</thead>
+<tbody>
+    {% for result in xmlvar.results.entities %}
+    <tr>
+        <td>{{result.name}}</td>
+        <td>{{result.primarycontactid}}</td>
+        <td>{{result.accountid}}</td>
+        <td>{{result.createdon}}</td>
+        <td>{{result.createdby}}</td>
+    </tr>
+    {% endfor %}
+
+</tbody>
+
+</table>
