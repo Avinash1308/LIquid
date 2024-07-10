@@ -1,0 +1,76 @@
+// for account page 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Active Accounts</title>
+</head>
+<body>
+    <h3>Active Account List</h3>
+    <ul>
+    {% fetchxml accounts %}
+        <fetch>
+            <entity name="account">
+                <attribute name="name" />
+                <attribute name="accountid" />
+                <filter type="and">
+                    <condition attribute="statecode" operator="eq" value="0" /> <!-- Active accounts -->
+                </filter>
+            </entity>
+        </fetch>
+    {% endfetchxml %}
+
+    {% for account in accounts.results.entities %}
+        <li><a href="https://account-contact.powerappsportals.com/Contact_Page?accountid={{ account.accountid }}">{{ account.name }}</a></li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// for contact page 
+{% assign accountid = request.params['accountid'] %}
+{% if accountid %}
+    {% fetchxml account_contacts %}
+        <fetch>
+            <entity name="contact">
+                <attribute name="fullname" />
+                <attribute name="emailaddress1" />
+                <filter type="and">
+                    <condition attribute="parentcustomerid" operator="eq" value="{{ accountid }}" />
+                </filter>
+            </entity>
+        </fetch>
+    {% endfetchxml %}
+
+    {% if account_contacts.results.size > 0 %}
+        <h3>Contacts for Account</h3>
+        <ul>
+        {% for contact in account_contacts.results %}
+            <li>{{ contact.fullname }} - {{ contact.emailaddress1 }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No contacts found for this account.</p>
+    {% endif %}
+{% else %}
+    <p>No account selected.</p>
+{% endif %}
