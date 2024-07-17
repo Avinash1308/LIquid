@@ -1,0 +1,42 @@
+$(document).ready(function() {
+    // Function to validate required fields
+    function validateFields() {
+        var firstName = document.getElementById('nfp_firstname').value.trim();
+        var lastName = document.getElementById('nfp_lastname').value.trim();
+        var email = document.getElementById('nfp_email').value.trim();
+
+        // Check if any required field is empty
+        if (firstName === '' || lastName === '' || email === '') {
+            return false; // Return false if any required field is empty
+        }
+        return true; // Return true if all required fields are filled
+    }
+
+    // Function to enable or disable the Next button based on validation
+    function toggleNextButton() {
+        if (validateFields()) {
+            $("#NextButton").prop("disabled", false); // Enable Next button
+        } else {
+            $("#NextButton").prop("disabled", true); // Disable Next button
+        }
+    }
+
+    // Initial check when the page loads
+    toggleNextButton();
+
+    // Handle input events to re-validate fields and toggle Next button
+    $("#nfp_firstname, #nfp_lastname, #nfp_email").on("input", function() {
+        toggleNextButton();
+    });
+
+    // Handle click event for Next button in the first step of multi-step form
+    $("#NextButton").click(function(event) {
+        if (!validateFields()) {
+            event.preventDefault(); // Prevent default form submission if fields are not filled
+            $('#error-message').text('Please fill in all required fields.'); // Display error message
+        } else {
+            // Clear any previous error message
+            $('#error-message').text('');
+        }
+    });
+});
